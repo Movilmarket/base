@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="purchase_order_form_landed_costs">
+            <field name="name">purchase.order.form.landed_costs</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="company_id" position="before">
+                	<field name="landed_costs_ok" invisible="1"/>
+                    <field name="landed_costs_id" attrs="{'readonly': [('landed_costs_ok', '=', True)]}"/>                    
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="purchase_order_filter_landed_costs">
+            <field name="name">purchase.order.filter.landed_costs</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<field name="user_id" position="after">
+            		<field name="landed_costs_id"/>
+            	</field>
+                <filter name="invoiced" position="after">
+                    <filter name="landed_costs" string="It has shipping costs" domain="[('landed_costs_id','!=', False)]" help="The purchase order has shipping costs"/>
+                </filter>
+                <filter name="expected_date" position="after">
+                	<filter string="Landed Costs" name="landed_cost_grp" domain="[]" context="{'group_by':'landed_costs_id'}"/>
+                </filter>
+            </field>
+        </record>  
+        
+        <menuitem action="stock_landed_costs.action_stock_landed_cost" name="Landed Costs" parent="purchase.menu_purchase_control" id="menu_purchase_landed_cost" sequence="115"/>      
+
+    </data>
+</openerp>

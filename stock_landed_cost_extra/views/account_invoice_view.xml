@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="account_invoice_form_landed_costs">
+            <field name="name">account.invoice.form.landed_costs</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="partner_bank_id" position="after">
+                	<field name="landed_costs_ok" invisible="1"/>
+                    <field name="landed_costs_id" attrs="{'readonly': [('landed_costs_ok', '=', True)]}"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="account_invoice_filter_landed_costs">
+            <field name="name">account.invoice.filter.landed_costs</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<field name="date" position="after">
+            		<field name="landed_costs_id"/>
+            	</field>
+                <filter name="myinvoices" position="after">
+                    <filter name="landed_costs" string="It has shipping costs" domain="[('landed_costs_id','!=', False)]" help="The invoice has shipping costs"/>
+                </filter>
+                <filter name="duedate" position="after">
+                	<filter string="Landed Costs" name="landed_cost_grp" domain="[]" context="{'group_by':'landed_costs_id'}"/>
+                </filter>
+            </field>
+        </record>
+        
+        <menuitem action="stock_landed_costs.action_stock_landed_cost" name="Landed Costs" parent="account.menu_finance_payables" id="menu_invoice_landed_cost" sequence="5"/>             
+
+    </data>
+</openerp>

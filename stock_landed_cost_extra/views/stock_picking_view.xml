@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="stock_picking_form_landed_costs">
+            <field name="name">stock.picking.form.landed_costs</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                	<field name="landed_costs_ok" invisible="1"/>
+                    <field name="landed_costs_id" attrs="{'readonly': [('landed_costs_ok', '=', True)],'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="stock_picking_filter_landed_costs">
+            <field name="name">stock.picking.filter.landed_costs</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<field name="group_id" position="after">
+            		<field name="landed_costs_id"/>
+            	</field>
+                <filter name="activities_my" position="after">
+                    <filter name="landed_costs" string="It has shipping costs" domain="[('landed_costs_id','!=', False)]" help="The entry note has shipping costs"/>
+                </filter>
+                <filter name="picking_type" position="after">
+                	<filter string="Landed Costs" name="landed_cost_grp" domain="[]" context="{'group_by':'landed_costs_id'}"/>
+                </filter>
+            </field>
+        </record>             
+
+    </data>
+</openerp>
