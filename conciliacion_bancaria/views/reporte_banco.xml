@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="reporte_banco">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2><span t-esc="res_company.name"/>: Libro de banco conciliado</h2>
+
+                    <div class="row mt32">
+                        <div class="col-xs-4">
+                            <strong>Cuenta: </strong> <span t-esc="data['cuenta_bancaria_id'][1]"/><br/>
+                        </div>
+                        <div class="col-xs-4">
+                            <strong>Fecha inicial: </strong> <span t-esc="data['fecha_desde']" t-esc-options='{"widget": "date"}'/><br/>
+                            <strong>Fecha final: </strong> <span t-esc="data['fecha_hasta']" t-esc-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+                    <t t-set="movimiento" t-value="movimientos_pendientes(data)"/>
+                    <t t-set="balance_final" t-value="0"/>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Doc</th>
+                                <th>Nombre</th>
+                                <th>Concepto</th>
+                                <th class="text-right">Credito</th>
+                                <th class="text-right">Debito</th>
+                                <th class="text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    Saldo Inicial
+                                </td>
+                                <td>
+                                </td>
+                                <td class="text-right">
+                                </td>
+                                <td class="text-right">
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="balance_inicial['balance_moneda'] or balance_inicial['balance']" t-esc-options="{'widget': 'monetary', 'display_currency': moneda}"/>
+                                </td>
+                            </tr>
+                            <tr t-foreach="lineas(True, data)" t-as="l">
+                                <td>
+                                    <span t-esc="l['fecha']" t-esc-options='{"widget": "date"}'/>
+                                </td>
+                                <td>
+                                    <span t-esc="l['documento']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="l['nombre']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="l['concepto']"/>
+                                </td>
+                                <td class="text-right">
+                                     <span t-esc="l['debito']" t-esc-options="{'widget': 'monetary', 'display_currency': l['moneda']}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="l['credito']" t-esc-options="{'widget': 'monetary', 'display_currency': l['moneda']}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="l['balance']" t-esc-options="{'widget': 'monetary', 'display_currency': l['moneda']}"/>
+                                </td>
+                                <t t-set="balance_final" t-value="l['balance']"/>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="text-right"><b>(+) Saldo conciliado</b></td>
+                                <td class="text-right"><span t-esc="balance_final" t-esc-options="{'widget': 'monetary', 'display_currency': moneda}"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="text-right"><b>(+) Movimientos no operados</b></td>
+                                <td class="text-right"><span t-esc="movimiento['movimientos_positivos']" t-esc-options="{'widget': 'monetary', 'display_currency': moneda}"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="text-right"><b>(-) Movimientos no operados</b></td>
+                                <td class="text-right"><span t-esc="movimiento['movimientos_negativos']" t-esc-options="{'widget': 'monetary', 'display_currency': moneda}"/></td>
+                            </tr>
+                            <t t-set="total" t-value="balance_final + movimiento['movimientos_positivos'] + movimiento['movimientos_negativos']"/>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="text-right"><b>(=) Total</b></td>
+                                <td class="text-right"><span t-esc="total" t-esc-options="{'widget': 'monetary', 'display_currency': moneda}"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="text-right"><b>(-) Saldo ingresado</b></td>
+                                <td class="text-right"><span t-esc="data['saldo_banco']" t-esc-options="{'widget': 'monetary', 'display_currency': moneda}"/></td>
+                            </tr>
+                            <t t-set="diferencia" t-value="total - data['saldo_banco']"/>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="text-right"><b>(=) Diferencia</b></td>
+                                <td class="text-right"><span t-esc="diferencia" t-esc-options="{'widget': 'monetary', 'display_currency': moneda}"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <t t-if="data['mostrar_circulacion']">
+                        <div>
+                            <strong>En circulación</strong>
+                        </div>
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Doc</th>
+                                    <th>Nombre</th>
+                                    <th>Concepto</th>
+                                    <th class="text-right">Credito</th>
+                                    <th class="text-right">Debito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="lineas(False, data)" t-as="l">
+                                    <td>
+                                        <span t-esc="l['fecha']" t-esc-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="l['documento']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="l['nombre']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="l['concepto']"/>
+                                    </td>
+                                    <td class="text-right">
+                                         <span t-esc="l['debito']" t-esc-options="{'widget': 'monetary', 'display_currency': l['moneda']}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="l['credito']" t-esc-options="{'widget': 'monetary', 'display_currency': l['moneda']}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <div class="row mt32">
+                        <div class="col-xs-4">
+                            <strong>Hecho por: ___________________________</strong>
+                        </div>
+                        <div class="col-xs-4">
+                        </div>
+                        <div class="col-xs-4">
+                            <strong>Revisado por: ___________________________</strong>
+                        </div>
+                    </div>
+
+                    <div class="row mt32">
+                        <div class="col-xs-4">
+                            <strong>Vo. Bo.: ___________________________</strong>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
