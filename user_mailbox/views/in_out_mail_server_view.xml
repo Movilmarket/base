@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Inherited Incoming Mail Servers Form view -->
+    <record id="view_email_server_user_form_inherit" model="ir.ui.view">
+        <field name="name">fetchmail.server.user.form</field>
+        <field name="model">fetchmail.server</field>
+        <field name="inherit_id" ref="fetchmail.view_email_server_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='password']" position="after">
+                <field name="user_id" invisible="1"/>
+                <field name="default" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherited Outgoing Mail Servers Form view -->
+    <record model="ir.ui.view" id="ir_mail_server_user_form_inherit">
+        <field name="model">ir.mail_server</field>
+        <field name="inherit_id" ref="base.ir_mail_server_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='smtp_debug']" position="after">
+                <field name="user_id" invisible="1"/>
+                <field name="default" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
