@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_conciliar" model="ir.ui.view">
+            <field name="name">conciliacion_bancaria.conciliar.form</field>
+            <field name="model">conciliacion_bancaria.conciliar</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Conciliar con banco">
+                   <group>
+                       <field name="fecha"/>
+                   </group>
+                   <footer>
+                       <button string="Desconciliar" name="desconciliar" type="object"/>
+                       <button string="Conciliar" name="conciliar" type="object"/>
+                       <button string="Cancel" class="btn-default" special="cancel"/>
+                   </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_conciliar" model="ir.actions.act_window">
+            <field name="name">Conciliar con banco</field>
+            <field name="res_model">conciliacion_bancaria.conciliar</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_conciliar"/>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="account.model_account_move_line" />
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="wizard_conciliacion_automatica" model="ir.ui.view">
+            <field name="name">conciliacion_bancaria.wizard</field>
+            <field name="model">conciliacion_bancaria.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Conciliacion automatica">
+                    <group>
+                        <group>
+                            <field name="fecha" required="1"/>
+                        </group>
+                        <group>
+                            <field name="account_id" required="1"/>
+                        </group>
+                        <field name="archivo" required="1"/>
+                    </group>
+                    <group string="Lineas excel">
+                        <field name="excel_ids" nolabel="1">
+                            <tree>
+                                <field name="fecha"/>
+                                <field name="tipo_documento"/>
+                                <field name="numero_documento"/>
+                                <field name="monto"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Apuntes contables">
+                        <field name="move_line_ids" nolabel="1"/>
+                    </group>
+                    <footer>
+                        <button name="conciliar" string="Hacer conciliacion" type="object" class="oe_highlight"/>
+                        o
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_conciliacion_bancaria_wizard">
+            <field name="name">Conciliacion automatica</field>
+            <field name="res_model">conciliacion_bancaria.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem action="action_conciliacion_bancaria_wizard" id="menu_wizard_conciliacion_bancaria_wizard" name="Conciliacion automatica" parent="account.menu_finance_entries_actions"/>
+
+        <record id="wizard_conciliacion_automatica_pendientes_excel" model="ir.ui.view">
+            <field name="name">conciliacion_bancaria.pendientes_excel.wizard</field>
+            <field name="model">conciliacion_bancaria.pendientes_excel.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Conciliar movimientos bancarios no encontrados">
+                    <group>
+                        <group>
+                            <field name="fecha" required="1"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="conciliar" string="Hacer conciliacion" type="object" class="oe_highlight"/>
+                        o
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_conciliacion_bancaria_pendientes_excel_wizard">
+            <field name="name">Conciliar movimientos bancarios no encontrados</field>
+            <field name="res_model">conciliacion_bancaria.pendientes_excel.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <act_window id="action_conciliacion_bancaria_pendientes_excel_wizard"
+            name="Conciliar"
+            src_model="conciliacion_bancaria.pendientes_excel"
+            res_model="conciliacion_bancaria.pendientes_excel.wizard"
+            view_type="form" view_mode="form"
+            key2="client_action_multi" target="new"
+        />
+
+    </data>
+</openerp>

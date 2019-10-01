@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="conciliacion_bancaria_asistente_reporte_banco" model="ir.ui.view">
+            <field name="name">conciliacion_bancaria.asistente_reporte_banco</field>
+            <field name="model">conciliacion_bancaria.asistente_reporte_banco</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Seleccione cuenta y rango de fecha">
+                    <group>
+                        <group>
+                            <field name="cuenta_bancaria_id"/>
+                            <field name="mostrar_circulacion"/>
+                        </group>
+                        <group>
+                            <field name="fecha_desde"/>
+                            <field name="fecha_hasta"/>
+                            <field name="saldo_banco"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Reporte" type="object" class="oe_highlight"/>
+                        o
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="conciliacion_bancaria_window_banco_reporte" name="Libro de banco conciliado" res_model="conciliacion_bancaria.asistente_reporte_banco" src_model="account.account" view_mode="form" target="new"/>
+        <menuitem action="conciliacion_bancaria_window_banco_reporte" id="conciliacion_bancaria_menu_banco_reporte_asistente" parent="account.menu_finance_reports"/>
+        <report id="conciliacion_bancaria_action_reporte_banco" model="conciliacion_bancaria.asistente_reporte_banco" string="Libro de banco conciliado" report_type="qweb-pdf" name="conciliacion_bancaria.reporte_banco" file="conciliacion_bancaria.reporte_banco"/>
+
+    </data>
+</openerp>

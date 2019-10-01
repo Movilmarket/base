@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_account_move_line_filter_conciliacion">
+            <field name="name">view_account_move_line_filter_conciliacion</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <data>
+                    <filter name="unreconciled" position="after">
+                        <filter string="No conciliado con banco" domain="[('conciliado_banco','=',False)]" help="Apuntes que no han sido conciliados con el banco" name="conciliado_banco"/>
+                    </filter>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>
