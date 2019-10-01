@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="bundle_product_pricerate_view" model="ir.ui.view">
+            <field name="name">bundle.product.pricerate.form</field>
+            <field name="model">bundle.product.pricerate</field>
+            <field name="arch" type="xml">
+                <form string="Pricelist Bundle Product" name="pricelist_bundle_product_view">
+                    <!-- <label string="This wizard will add Pack / Bundle and it's products on the order line."/> -->
+                    <group>
+                        <group>
+                            <field name="pricelist_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="qty"  class="oe_inline"/>
+                            <field name="sale_price"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="budleproducts" string="Products">
+                            <field name="bundle_product_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="qty"/>
+                                    <field name="uom_id"/>
+                                    <field name="unit_price"/>
+                                    <field name="sale_price"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="update_pricelist_bundle_product" type="object" string="Update Pricelist/Bundle" class="btn-primary" groups="sales_team.group_sale_salesman"/>
+                        or
+                        <button string="_Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>            
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_bundle_pricerate">
+            <field name="name">Update Pricelist / Bundle</field>
+            <field name="res_model">bundle.product.pricerate</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="bundle_product_pricerate_view"/>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>
